@@ -2,6 +2,8 @@ package com.example.questlybackend.controllers;
 
 import com.example.questlybackend.dtos.QuestionDto;
 import com.example.questlybackend.models.Question;
+import com.example.questlybackend.models.QuestionDocument;
+import com.example.questlybackend.services.QuestionSearchService;
 import com.example.questlybackend.services.QuestionService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,9 +14,13 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/v1/questions")
 public class QuestionController {
-    private QuestionService questionService;
-    public QuestionController(QuestionService questionService) {
+
+    private final QuestionSearchService questionSearchService;
+    private final QuestionService questionService;
+
+    public QuestionController(QuestionService questionService, QuestionSearchService questionSearchService) {
         this.questionService = questionService;
+        this.questionSearchService = questionSearchService;
     }
 
     @GetMapping
@@ -37,5 +43,10 @@ public class QuestionController {
     public ResponseEntity<Void> deleteQuestion(@PathVariable Long id) {
         questionService.deleteQuestion(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/search")
+    public List<QuestionDocument> searchQuestions(@RequestParam String query) {
+        return questionSearchService.searchQuestions(query);
     }
 }

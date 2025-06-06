@@ -22,13 +22,16 @@ public class QuestionService {
     private final QuestionRepository questionRepository;
     private final UserRepository userRepository;
     private final TagRepository tagRepository;
+    private final QuestionIndexService questionIndexService;
 
     public QuestionService(QuestionRepository questionRepository,
                            UserRepository userRepository,
-                           TagRepository tagRepository) {
+                           TagRepository tagRepository,
+                           QuestionIndexService questionIndexService) {
         this.questionRepository = questionRepository;
         this.userRepository = userRepository;
         this.tagRepository = tagRepository;
+        this.questionIndexService = questionIndexService;
     }
 
     public List<Question> getQuestions(int page, int size) {
@@ -58,6 +61,11 @@ public class QuestionService {
                 .collect(Collectors.toSet());
         question.setTags(tags);
 
-        return questionRepository.save(question);
+
+
+        Question savedQuestion = questionRepository.save(question);
+        questionIndexService.indexQuestion(savedQuestion);
+
+        return savedQuestion;
     }
 }
