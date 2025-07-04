@@ -35,3 +35,21 @@ out/
 
 ### VS Code ###
 .vscode/
+# Java & Maven
+/target/
+/.idea/
+/*.iml
+*.class
+*.log
+
+# OS-specific
+.DS_Store
+Thumbs.db
+
+# Application config
+src/main/resources/application.properties
+src/main/resources/application.yml
+
+# Docker
+**/.env
+**/docker-compose.override.yml
